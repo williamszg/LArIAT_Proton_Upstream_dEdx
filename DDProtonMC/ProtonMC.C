@@ -561,12 +561,9 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
       // ################################################
       // ### Calculating the angles for the Geant4 MC ###
       // ################################################
-      TVector3 z_hat_MC;
+      TVector3 z_hat_MC(0,0,1);
       TVector3 p_hat_0_MC;
       
-      z_hat_MC.SetX(0);
-      z_hat_MC.SetY(0);
-      z_hat_MC.SetZ(0);
       p_hat_0_MC.SetX(FrontFace_Px);
       p_hat_0_MC.SetY(FrontFace_Py);
       p_hat_0_MC.SetZ(FrontFace_Pz); 
