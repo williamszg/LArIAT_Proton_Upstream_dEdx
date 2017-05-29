@@ -99,7 +99,6 @@ TH2D *hMCPrimaryYvsZNotWeirdPeakDivide = new TH2D("hMCPrimaryYvsZNotWeirdPeakDiv
 
 
 
-
 /////////////////////////////////// Weird Energy Loss Peak 1 X vs Z //////////////////////////////////////////////
 TH2D *hMCPrimaryXvsZWeirdPeak1 = new TH2D("hMCPrimaryXvsZWeirdPeak1", "X vs Z", 200, -100, 10, 120, -10, 50);
 /////////////////////////////////// Weird Energy Loss Peak 1 Y vs Z //////////////////////////////////////////////
@@ -214,6 +213,9 @@ TH1D *hMCELossUpstreamTPCRecoMap = new TH1D("hMCELossUpstreamTPCRecoMap", "Energ
 /////////////////////////////////// Delta Energy Loss in TPC between True and dE/dX method /////////////////////////
 TH1D *hDeltaEnergyLossInTPCTruevsReco = new TH1D("hDeltaEnergyLossInTPCTruevsReco", "#Delta Energy Loss in the TPC (True - Reco)", 1000, -75, 75);
 
+
+TH2D *hDeltaEInTPCvsTrkLength = new TH2D("hDeltaEInTPCvsTrkLength", "TrkLength vs Delta E", 1000, 0, 110, 1000, -75, 75);
+TH2D *hDeltaEInTPCvsKEinit = new TH2D("hDeltaEInTPCvsKEinit", "Initial KE vs Delta E", 80, 0, 800, 1000, -75, 75);
 // ===================================================================================================================
 // ===================================================================================================================
 
@@ -405,9 +407,9 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 	                               (MidPy[iG4][iPriTrj]*MidPy[iG4][iPriTrj]) +
 				       (MidPz[iG4][iPriTrj]*MidPz[iG4][iPriTrj])))*1000;
 				       
-	    float Energy_UpstreamPoint1 = sqrt( (Momentum_Point1*Momentum_Point1) + (particle_mass*particle_mass)  );
+	    float Energy_UpstreamPoint1 = sqrt( (Momentum_Point1*Momentum_Point1) + (particle_mass*particle_mass)) - particle_mass;
 	       
-	    float Energy_UpstreamPoint2 = sqrt( (Momentum_Point2*Momentum_Point2) + (particle_mass*particle_mass)  );
+	    float Energy_UpstreamPoint2 = sqrt( (Momentum_Point2*Momentum_Point2) + (particle_mass*particle_mass)) - particle_mass;
 	       
 	    EnergyLossOutsideTPC +=  Energy_UpstreamPoint1 - Energy_UpstreamPoint2;
 	    }//<---End Looking at energy loss upstream of TPC
@@ -442,10 +444,10 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 	       
 	       }//<---End finding upstream point
 	    		       
-	    float Energy_Point1 = sqrt( (Momentum_Point1*Momentum_Point1) + (particle_mass*particle_mass)  );
+	    float Energy_Point1 = sqrt( (Momentum_Point1*Momentum_Point1) + (particle_mass*particle_mass))  - particle_mass;
 	       
 	    //std::cout<<"Energy_Point1 = "<<Energy_Point1<<std::endl;
-	    float Energy_Point2 = sqrt( (Momentum_Point2*Momentum_Point2) + (particle_mass*particle_mass)  );
+	    float Energy_Point2 = sqrt( (Momentum_Point2*Momentum_Point2) + (particle_mass*particle_mass) ) - particle_mass;
 	    //std::cout<<"Energy_Point2 = "<<Energy_Point2<<std::endl;
 	       
 	    //std::cout<<std::endl;
@@ -494,9 +496,9 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 	                               (MidPy[iG4][iPriTrj]*MidPy[iG4][iPriTrj]) +
 				       (MidPz[iG4][iPriTrj]*MidPz[iG4][iPriTrj])))*1000;
 				       
-	       float Energy_UpstreamPoint1 = sqrt( (Momentum_Point1*Momentum_Point1) + (particle_mass*particle_mass)  );
+	       float Energy_UpstreamPoint1 = sqrt( (Momentum_Point1*Momentum_Point1) + (particle_mass*particle_mass)) - particle_mass;
 	       
-	       float Energy_UpstreamPoint2 = sqrt( (Momentum_Point2*Momentum_Point2) + (particle_mass*particle_mass)  );
+	       float Energy_UpstreamPoint2 = sqrt( (Momentum_Point2*Momentum_Point2) + (particle_mass*particle_mass)) - particle_mass;
 	       
 	       
 	       float EnergyLossAtThisPoint = Energy_UpstreamPoint1 - Energy_UpstreamPoint2;
@@ -532,9 +534,9 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 	                               (MidPy[iG4][iPriTrj]*MidPy[iG4][iPriTrj]) +
 				       (MidPz[iG4][iPriTrj]*MidPz[iG4][iPriTrj])))*1000;
 				       
-	       float Energy_UpstreamPoint1 = sqrt( (Momentum_Point1*Momentum_Point1) + (particle_mass*particle_mass)  );
+	       float Energy_UpstreamPoint1 = sqrt( (Momentum_Point1*Momentum_Point1) + (particle_mass*particle_mass)) - particle_mass;
 	       
-	       float Energy_UpstreamPoint2 = sqrt( (Momentum_Point2*Momentum_Point2) + (particle_mass*particle_mass)  );
+	       float Energy_UpstreamPoint2 = sqrt( (Momentum_Point2*Momentum_Point2) + (particle_mass*particle_mass)) - particle_mass;
 	       
 	       
 	       float EnergyLossAtThisPoint = Energy_UpstreamPoint1 - Energy_UpstreamPoint2;
@@ -796,6 +798,7 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
    double MCRecoResRange[1000]={0.};
    double MCRecoPitch[1000]={0.};
    
+   double primary_track_length = 0;
    // ##########################################
    // ### Loop over all reconstructed tracks ###
    // ##########################################
@@ -804,6 +807,7 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
       // ###############################################################
       // ### Looping over the calorimetry spacepoints for this track ###
       // ###############################################################
+      primary_track_length = trklength[nTPCtrk];
       for(int nspts = 0; nspts < ntrkhits[nTPCtrk]; nspts++)
          {
 	 MCRecodEdX[nMCRecoSpts]     = trkdedx[nTPCtrk][1][nspts];
@@ -1068,6 +1072,9 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
    
    hDeltaEnergyLossInTPCTruevsReco->Fill(DeltaEnergyLossInTPC);
 
+   hDeltaEInTPCvsTrkLength->Fill(primary_track_length,DeltaEnergyLossInTPC);
+   hDeltaEInTPCvsKEinit->Fill(InitialKineticEnergy,DeltaEnergyLossInTPC);
+
    hRecoMCTPCStartX->Fill(FirstSpacePointX);
    hRecoMCTPCStartY->Fill(FirstSpacePointY);
    hRecoMCTPCStartZ->Fill(FirstSpacePointZ);
@@ -1209,5 +1216,8 @@ hMCPrimaryYvsZNotWeirdPeakFlux->Write();
 hMCPrimaryXvsZNotWeirdPeakDivide->Write();
 hMCPrimaryYvsZNotWeirdPeakDivide->Write();
 hMCPrimaryPzvsELossUpstream->Write();
-   
+
+hDeltaEInTPCvsTrkLength->Write();
+hDeltaEInTPCvsKEinit->Write();
+
 }//<----End Loop()
