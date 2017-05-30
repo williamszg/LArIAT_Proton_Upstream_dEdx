@@ -349,9 +349,6 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
       g4Primary_Py[nG4Primary] = Py[iG4] * 1000; //<---Converting to MeV
       g4Primary_Pz[nG4Primary] = Pz[iG4] * 1000; //<---Converting to MeV
       
-      g4PrimaryEnd_Px[nG4Primary] = EndPx[iG4] * 1000;
-      g4PrimaryEnd_Py[nG4Primary] = EndPy[iG4] * 1000;
-      g4PrimaryEnd_Pz[nG4Primary] = EndPz[iG4] * 1000;
 
       
       // ==========================
