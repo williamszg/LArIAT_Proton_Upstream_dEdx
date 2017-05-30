@@ -252,6 +252,7 @@ double ZUpperFid = 90;
 TFile *f1 = new TFile("./DataDrivenProtonMC_EnergyCalibrationTable.root");
 
 
+
 if (fChain == 0) return;
 Long64_t nentries = fChain->GetEntriesFast();
 Long64_t nbytes = 0, nb = 0;
@@ -260,7 +261,6 @@ Long64_t nbytes = 0, nb = 0;
 // ###                 Looping over events             ###
 // ####################################################### 
 for (Long64_t jentry=0; jentry<nentries;jentry++) 
-//for (Long64_t jentry=0; jentry<25000;jentry++) 
    {
    Long64_t ientry = LoadTree(jentry);
    if (ientry < 0) break;
@@ -289,6 +289,7 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
    float g4Primary_X0[100] = {0.}, g4Primary_Y0[100] = {0.}, g4Primary_Z0[100] = {0.};
    float g4Primary_Xf[100] = {0.}, g4Primary_Yf[100] = {0.}, g4Primary_Zf[100] = {0.};
    float g4Primary_Px[100] = {0.}, g4Primary_Py[100] = {0.}, g4Primary_Pz[100] = {0.};
+   float g4PrimaryEnd_Px[100] = {0.}, g4PrimaryEnd_Py[100] = {0.}, g4PrimaryEnd_Pz[100] = {0.};
    
    // #############################################
    // ###       Defining variables for the      ###
@@ -330,7 +331,7 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
       if(pdg[iG4] == 2212 && process_primary[iG4] == 1 && 
          EndPointz[iG4] > 0 && EndPointz[iG4] < 90 && EndPointx[iG4] > 0 && 
          EndPointx[iG4] < 47 && EndPointy[iG4] > -20 && 
-	 EndPointy[iG4] < 20 && NumberDaughters[iG4] == 0) {EventsWhereParticleStops = true;  }
+	 EndPointy[iG4] < 20 && NumberDaughters[iG4] == 0) {EventsWhereParticleStops = true; }
 
       else {continue;}
       
@@ -348,7 +349,10 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
       g4Primary_Py[nG4Primary] = Py[iG4] * 1000; //<---Converting to MeV
       g4Primary_Pz[nG4Primary] = Pz[iG4] * 1000; //<---Converting to MeV
       
-      
+      g4PrimaryEnd_Px[nG4Primary] = EndPx[iG4] * 1000;
+      g4PrimaryEnd_Py[nG4Primary] = EndPy[iG4] * 1000;
+      g4PrimaryEnd_Pz[nG4Primary] = EndPz[iG4] * 1000;
+
       
       // ==========================
       // === Filling histograms ===
@@ -377,7 +381,7 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 	                        (g4Primary_Py[nG4Primary]*g4Primary_Py[nG4Primary]) + 
 				(g4Primary_Pz[nG4Primary]*g4Primary_Pz[nG4Primary]) );
 				
-      InitialKineticEnergy = pow( (momentumScale*momentumScale) + (particle_mass*particle_mass) ,0.5) - particle_mass;
+      InitialKineticEnergy = sqrt( (momentumScale*momentumScale) + (particle_mass*particle_mass) ) - particle_mass;
       
       hMCTrueInitialKE->Fill(InitialKineticEnergy);
       
@@ -447,7 +451,7 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 	    float Energy_Point1 = sqrt( (Momentum_Point1*Momentum_Point1) + (particle_mass*particle_mass))  - particle_mass;
 	       
 	    //std::cout<<"Energy_Point1 = "<<Energy_Point1<<std::endl;
-	    float Energy_Point2 = sqrt( (Momentum_Point2*Momentum_Point2) + (particle_mass*particle_mass) ) - particle_mass;
+	    float Energy_Point2 = sqrt( (Momentum_Point2*Momentum_Point2) + (particle_mass*particle_mass)) - particle_mass;
 	    //std::cout<<"Energy_Point2 = "<<Energy_Point2<<std::endl;
 	       
 	    //std::cout<<std::endl;
@@ -496,9 +500,9 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 	                               (MidPy[iG4][iPriTrj]*MidPy[iG4][iPriTrj]) +
 				       (MidPz[iG4][iPriTrj]*MidPz[iG4][iPriTrj])))*1000;
 				       
-	       float Energy_UpstreamPoint1 = sqrt( (Momentum_Point1*Momentum_Point1) + (particle_mass*particle_mass)) - particle_mass;
+	       float Energy_UpstreamPoint1 = sqrt((Momentum_Point1*Momentum_Point1) + (particle_mass*particle_mass)) - particle_mass;
 	       
-	       float Energy_UpstreamPoint2 = sqrt( (Momentum_Point2*Momentum_Point2) + (particle_mass*particle_mass)) - particle_mass;
+	       float Energy_UpstreamPoint2 = sqrt((Momentum_Point2*Momentum_Point2) + (particle_mass*particle_mass)) - particle_mass;
 	       
 	       
 	       float EnergyLossAtThisPoint = Energy_UpstreamPoint1 - Energy_UpstreamPoint2;
