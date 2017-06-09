@@ -241,20 +241,28 @@ for (Long64_t jentry=0; jentry<nentries; jentry++)
 	 if (MidPosZ[iG4][iPriTrj] < 0)
             {
 
-	    float Momentum_Point1 = 
+	    float Momentum_Point1 = ( sqrt((MidPx[iG4][iPriTrj-1]*MidPx[iG4][iPriTrj-1]) +
+				      (MidPy[iG4][iPriTrj-1]*MidPy[iG4][iPriTrj-1]) + 
+				      (MidPz[iG4][iPriTrj-1]*MidPz[iG4][iPriTrj-1])) )*1000;
 
-            float Momentum_Point2 =
+	    float Momentum_Point2 = ( sqrt( (MidPx[iG4][iPriTrj]*MidPx[iG4][iPriTrj]) +
+				      (MidPy[iG4][iPriTrj]*MidPy[iG4][iPriTrj]) + 
+				      (MidPz[iG4][iPriTrj]*MidPz[iG4][iPriTrj]) ) )*1000;
 
-	    float Energy_UpstreamPoint1 = 
+	    float Energy_UpstreamPoint1 = sqrt( (Momentum_Point1*Momentum_Point1) +
+			                        (particle_mass*particle_mass) ) - particle_mass;
 
-	    float Energy_UpstreamPoint2 =
+	    float Energy_UpstreamPoint2 = sqrt( (Momentum_Point2*Momentum_Point2) +
+			                        (particle_mass*particle_mass) ) - particle_mass;
 
 	    EnergyLossOutsideTPC += Energy_UpstreamPoint1 - Energy_UpstreamPoint2;
 
 	    }//<---End looking at energy loss upstream of TPC
 
 	 //--- Only Looking at Points Which Are Inside of the TPC --|
-	 if ()
+	 if (MidPosZ[iG4][iPriTrj] >= 0 && MidPosZ[iG4][iPriTrj] < 90 &&
+	     MidPosY[iG4][iPriTrj] > -20 && MidPosY[iG4][iPriTrj] < 20 &&
+	     MidPosX[iG4][iPriTrj] > 0 && MidPosX[iG4][iPriTrj] < 47)
             {
 
             
