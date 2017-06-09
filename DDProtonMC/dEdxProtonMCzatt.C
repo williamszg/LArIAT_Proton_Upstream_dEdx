@@ -112,7 +112,160 @@ for (Long64_t jentry=0; jentry<nentries; jentry++)
 
    //----------------------------------------------|
 
-//################################################################################|
-//###                      GEANT 4 Information                  ###|
+   //#####################################################################|
+   //#####################################################################|
+   //#########                                                   #########|
+   //###                      GEANT 4 Information                      ###|
+   //#########                                                   #########|
+   //#####################################################################|
+   //#####################################################################|
+
+   bool EventsWhereParticleStops = false;
+
+   int nG4Primary = 0;
+   int nG4TrajPoints = 0;
+
+   float g4Primary_X0[100] = {0.}, g4Primary_Y0[100] = {0.}, g4Primary_Z0[100] = {0.};
+   float g4Primary_Xf[100] = {0.}, g4Primary_Yf[100] = {0.}, g4Primary_Zf[100] = {0.};
+   float g4Primary_Px[100] = {0.}, g4Primary_Py[100] = {0.}, g4Primary_Pz[100] = {0.};
+   float g4PrimaryEnd_Px[100] = {0.}, g4PrimaryEnd_Py[100] = {0.}, g4PrimaryEnd_Pz[100] = {0.};
+
+   //----------------------------------------------------------------------------|
+   //---   Defining Variables for the Momentum at the Front Face of the TPC   ---|
+   //----------------------------------------------------------------------------|
+
+   float FrontFace_Px = 0, FrontFace_Py = 0, FrontFace_Pz = 0;
+
+   //----------------------------------------------------------------------------|
+
+   //---------------------------------|
+   //--- Variables for Energy Loss ---|
+   //---------------------------------|
+
+   float EnergyLossOutsideTPC = 0;
+   float EnergyLossInside TPC = 0;
+   float ERemainingMCTrue = 9999;
+   float ERemainingMCMap = 9999;
+   float ERemainingMCDumbFlat = 9999;
+   float RecoEnergyLossInsideTPC = 0;
+   float EnergyRemainingRecoTPCOnly = 9999;
+   float InitialKineticEnergy = 0;
+   float EnergyLossFromMap = 0;
+
+   //---------------------------------|
+   
+   //**********************************|
+   //*** Loop Over All G4 Particles ***|
+   //**********************************|
+
+   for (int iG4 = 0; iG4 < geant_list_size; iG4++)
+      {
+      
+      //#################################################################|
+      //### Set to True if This Event is a Stopping Proton in the TPC ###|
+      //#################################################################|
+
+      if (pdg[iG4] == 2212 && process_primary[iG4] == 1 && NumberDaughters[iG4] == 0 &&
+          EndPointz[iG4] > 0 && EndPointz[iG4] < 90 && 
+	  EndPointy[iG4] > -20 && EndPointy[iG4] < 20 &&
+	  EndPointx[iG4] > 0 && EndPointx[iG4] < 20) {EventsWhereParticleStops = true;}
+
+      else {continue;}
+
+      //--- Recording Information for Use Later ---|
+      g4Primary_X0[nG4Primary] = StartPointx[iG4];
+      g4Primary_Y0[nG4Primary] = StartPointy[iG4];
+      g4Primary_Z0[nG4Primary] = StartPointz[iG4];
+
+      g4Primary_Xf[nG4Primary] = EndPointx[iG4];
+      g4Primary_Yf[nG4Primary] = EndPointy[iG4];
+      g4Primary_Zf[nG4Primary] = EndPointz[iG4];
+
+      g4Primary_Px[nG4Primary] = Px[iG4] * 1000; //<---Converting to MeV
+      g4Primary_Py[nG4Primary] = Py[iG4] * 1000; //<---Converting to MeV
+      g4Primary_Pz[nG4Primary] = Pz[iG4] * 1000; //<---Converting to MeV
+
+      //--------------------------|
+      //--- Filling Histograms ---|
+      //--------------------------|
+
+      hMCPrimaryPxUnWeighted->Fill(g4Primary_Px[nG4Primary]);
+      hMCPrimaryPyUnWeighted->Fill(g4Primary_Py[nG4Primary]);
+      hMCPrimaryPzUnWeighted->Fill(g4Primary_Pz[nG4Primary]);
+
+      hMCPrimaryStartX->Fill(StartPointx[iG4]);
+      hMCPrimaryStartY->Fill(StartPointy[iG4]);
+      hMCPrimaryStartZ->Fill(StartPointz[iG4]);
+
+      hMCPrimaryEndX->Fill(EndPointx[iG4]);
+      hMCPrimaryEndY->Fill(EndPointy[iG4]);
+      hMCPrimaryEndZ->Fill(EndPointz[iG4]);
+
+      hMCPrimaryEndXvsZ->Fill(EndPointz[iG4], EndPointx[iG4]);
+      hMCPrimaryEndYvsZ->Fill(EndPointz[iG4], EndPointy[iG4]);
+
+      //--------------------------|
+
+      //#################################################################|
+
+      //#############################################################|
+      //### Calculating the Momentum from the MC Primary Particle ###|
+      //#############################################################|
+
+      float momentumScale = sqrt( (g4Primary_Px[nG4Primary]*g4Primary_Px[nG4Primary]) +
+		                  (g4Primary_Py[nG4Primary]*g4Primary_Py[nG4Primary]) +
+				  (g4Primary_Pz[nG4Primary]*g4Primary_Pz[nG4Primary]) );
+
+      InitialKineticEnergy = sqrt( (momentumScale*momentumScale) + 
+		                   (particle_mass*particle_mass) ) - particle_mass;
+
+      hMCTrueInitialKE->Fill(InitialKineticEnergy);
+
+      //--- Defining First Point ---|
+      float FirstPoint_Z = 999;
+      float FirstPoint_Y = 999;
+      float FirstPoint_X = 999;
+
+      EnergyLossOutsideTPC = 0;
+
+      //#############################################################|
+
+      //##################################################|
+      //### Looping Over All Primary Trajectory Points ###|
+      //##################################################|
+
+      for (int iPriTrj = 1; iPriTrj < NTrTrajPts[iG4]; iPriTrj++)
+	 {
+         
+         //--- Only Looking at Points Which Are Upstream of the TPC ---|
+	 if (MidPosZ[iG4][iPriTrj] < 0)
+            {
+
+	    float Momentum_Point1 = 
+
+            float Momentum_Point2 =
+
+	    float Energy_UpstreamPoint1 = 
+
+	    float Energy_UpstreamPoint2 =
+
+	    EnergyLossOutsideTPC += Energy_UpstreamPoint1 - Energy_UpstreamPoint2;
+
+	    }//<---End looking at energy loss upstream of TPC
+
+	 //--- Only Looking at Points Which Are Inside of the TPC --|
+	 if ()
+            {
+
+            
+
+	    }
+
+      //##################################################|
+
+   //**********************************|
+   
+   //#####################################################################|   
+   //#####################################################################|
 
 //===========================|
