@@ -1,4 +1,4 @@
-#define dEdxProtonMCzatt_cxx
+#define ProtonMC_cxx
 #include "ProtonMC.h"
 #include <TH2.h>
 #include <TStyle.h>
@@ -43,11 +43,52 @@ TH1D *hMCPrimaryPyUnWeighted = new TH1D("hMCPrimaryPyUnWeighted", "Primary Parti
 //--- Primary Particle Initial Pz ---|
 TH1D *hMCPrimaryPzUnWeighted = new TH1D("hMCPrimaryPzUnWeighted", "Primary Particle P_{z_0}", 250, 0, 2500);
 
+//--- Initial Kinetic Energy ---|
+TH1D *hMCTrueInitialKE = new TH1D("hMCTrueInitialKE", "Initial Kinetic Energy (MC Truth)", 1100, -100, 1000);
+
+//--- Energy Loss in the Upstream Region of the Beamline ---|
+TH1D *hMCTrueELossUpstream = new TH1D("hMCTrueELossUpstream", "Energy Loss Prior to Entering the TPC (MC Truth)", 1100, -100, 1000);
+
+//--- Energy Loss in the TPC ---|
+TH1D *hMCTrueELossInTPC = new TH1D("hMCTrueELossInTPC", "Energy Loss Inside the TPC (MC Truth)", 1100, -100, 1000);
+
+//--- Final Kinetic Energy in the TPC ---|
+TH1D *hMCTrueERemain = new TH1D("hMCTrueERemain", "Remaining Energy (MC Truth)", 1000, -50, 50);
+
+//--- Energy Loss Upstream of the TPC ---|
+TH2D *hELossXvsY = new TH2D("hELossXvsY", "Energy Loss X vs Y", 200, 0, 50, 200, -25, 25);
+
+//--- Energy Loss Upstream of the Flux TPC ---|
+TH2D *hELossXvsYFlux = new TH2D("hELossXvsYFlux", "Energy Loss X vs Y", 200, 0, 50, 200, -25, 25);
+
+//--- Divided Energy Loss ---|
+TH2D *hELossXvsYDivide = new TH2D("hELossXvsYDivide", "Energy Loss X vs Y", 200, 0, 50, 200, -25, 25);
+
+//--- MC Theta ---|
+TH1D *hMCThetaAtFrontFace = new TH1D("hMCThetaAtFrontFace", "#theta at the Front Face of the TPC", 80, -10, 30);
+
+//--- MC Phi ---|
+TH1D *hMCPhiAtFrontFace = new TH1D("hMCPhiAtFrontFace", "#phi at the Front Face of the TPC", 360, 0, 360);
+
+//--- Phi vs Theta Energy Loss ---|
+TH2D *hPhivsThetaELoss = new TH2D("hPhivsThetaELoss", "#phi vs #theta Energy Loss", 360, 0, 360, 40, -10, 30);
+
+//--- Phi vs Theta Energy Loss Flux ---|
+TH2D *hPhivsThetaELossFlux = new TH2D("hPhivsThetaELossFlux", "#phi vs #theta Energy Loss", 360, 0, 360, 40, -10, 30);
+
+//--- Phi vs Theta Energy Loss Divided ---|
+TH2D *hPhivsThetaELossDivide = new TH2D("hPhivsThetaELossDivide", "#phi vs #theta Energy Loss", 360, 0, 360, 40, -10, 30);
+
+//--- Energy Loss Upstream vs Particle Pz ---|
+TH2D *hMCPrimaryPzvsELossUpstream = new TH2D("hMCPrimaryPzvsELossUpstream", "Energy Loss Upstream vs Primary Particle P_{z}", 250, 0, 2500, 1100, -100, 1000);
+
 //=================================================================================|
 
 
-void dEdxProtonMCzatt::Loop()
+void ProtonMC::Loop()
 {
+
+float particle_mass = 938.28;
 
 //==========================================|
 //=== Counters for Event Reduction Table ===|
@@ -143,7 +184,7 @@ for (Long64_t jentry=0; jentry<nentries; jentry++)
    //---------------------------------|
 
    float EnergyLossOutsideTPC = 0;
-   float EnergyLossInside TPC = 0;
+   float EnergyLossInsideTPC = 0;
    float ERemainingMCTrue = 9999;
    float ERemainingMCMap = 9999;
    float ERemainingMCDumbFlat = 9999;
@@ -241,9 +282,9 @@ for (Long64_t jentry=0; jentry<nentries; jentry++)
 	 if (MidPosZ[iG4][iPriTrj] < 0)
             {
 
-	    float Momentum_Point1 = ( sqrt((MidPx[iG4][iPriTrj-1]*MidPx[iG4][iPriTrj-1]) +
+	    float Momentum_Point1 = ( sqrt( (MidPx[iG4][iPriTrj-1]*MidPx[iG4][iPriTrj-1]) +
 				      (MidPy[iG4][iPriTrj-1]*MidPy[iG4][iPriTrj-1]) + 
-				      (MidPz[iG4][iPriTrj-1]*MidPz[iG4][iPriTrj-1])) )*1000;
+				      (MidPz[iG4][iPriTrj-1]*MidPz[iG4][iPriTrj-1]) ) )*1000;
 
 	    float Momentum_Point2 = ( sqrt( (MidPx[iG4][iPriTrj]*MidPx[iG4][iPriTrj]) +
 				      (MidPy[iG4][iPriTrj]*MidPy[iG4][iPriTrj]) + 
@@ -265,15 +306,64 @@ for (Long64_t jentry=0; jentry<nentries; jentry++)
 	     MidPosX[iG4][iPriTrj] > 0 && MidPosX[iG4][iPriTrj] < 47)
             {
 
-            
+	    float Momentum_Point1 = ( sqrt( (MidPx[iG4][iPriTrj-1]*MidPx[iG4][iPriTrj-1]) +
+				      (MidPy[iG4][iPriTrj-1]*MidPy[iG4][iPriTrj-1]) + 
+				      (MidPz[iG4][iPriTrj-1]*MidPz[iG4][iPriTrj-1]) ) )*1000;
+
+	    float Momentum_Point2 = ( sqrt( (MidPx[iG4][iPriTrj]*MidPx[iG4][iPriTrj]) +
+				      (MidPy[iG4][iPriTrj]*MidPy[iG4][iPriTrj]) + 
+				      (MidPz[iG4][iPriTrj]*MidPz[iG4][iPriTrj]) ) )*1000;
+           
+	    //--- Storing the Upstream Point ---|
+	    if (MidPosZ[iG4][iPriTrj] < FirstPoint_Z)
+	       {
+               FirstPoint_Z = MidPosZ[iG4][iPriTrj];
+               FirstPoint_Y = MidPosY[iG4][iPriTrj];
+               FirstPoint_X = MidPosX[iG4][iPriTrj];
+
+	       FrontFace_Px = MidPx[iG4][iPriTrj] * 1000;
+	       FrontFace_Py = MidPy[iG4][iPriTrj] * 1000;
+	       FrontFace_Pz = MidPz[iG4][iPriTrj] * 1000;
+
+	       }
+
+	    float Energy_Point1 = sqrt( (Momentum_Point1*Momentum_Point1) +
+			                (particle_mass*particle_mass) ) - particle_mass;
+
+	    float Energy_Point2 = sqrt( (Momentum_Point2*Momentum_Point2) +
+			                (particle_mass*particle_mass) ) - particle_mass;
+
+            EnergyLossInsideTPC += Energy_Point1 - Energy_Point2;
 
 	    }
 
+	 }
+
       //##################################################|
 
+   //--- Filling Initial TPC Information ---|
+   hMCPrimaryTPCStartX->Fill(FirstPoint_X);
+   hMCPrimaryTPCStartY->Fill(FirstPoint_Y);
+   hMCPrimaryTPCStartZ->Fill(FirstPoint_Z);
+
+   //--- Filling Histograms for Energy Loss ---|
+   hMCTrueELossUpstream->Fill(EnergyLossOutsideTPC);
+   hMCTrueELossInTPC->Fill(EnergyLossInsideTPC);
+   
+   hELossXvsY->Fill(FirstPoint_X, FirstPoint_Y, EnergyLossOutsideTPC);
+   hELossXvsYFlux->Fill(FirstPoint_X, FirstPoint_Y);
+
+   hMCPrimaryPzvsELossUpstream->Fill(momentumScale, EnergyLossOutsideTPC);
+      
    //**********************************|
    
    //#####################################################################|   
    //#####################################################################|
 
 //===========================|
+
+      }
+
+   }
+
+}
