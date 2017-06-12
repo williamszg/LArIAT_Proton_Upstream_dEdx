@@ -198,7 +198,59 @@ TH2D *hPhivsThetaELossDivideTop = new TH2D("hPhivsThetaELossDivideTop", "#phi vs
 
 
 
+//--- Energy Loss in the Upstream Region of the Beamline ---|
+TH1D *hMCELossUpstreamLookUp = new TH1D("hMCELossUpstreamLookUp", "Energy Loss Prior to Entering the TPC (Map)", 1100, -100, 1000);
 
+//--- Final Kinetic Energy in the TPC Using Map ---|
+TH1D *hERemainMCMap = new TH1D("hERemainMCMap", "Remaining Energy from MC Map", 1000, -75, 75);
+
+//--- Delta Energy Loss Between True and Map ---|
+TH1D *hDeltaEnergyLossTruevsMap = new TH1D("hDeltaEnergyLossTruevsMap", "#Delta Energy Loss Upstream (True - Map)", 1000, -75, 75);
+
+//--- Energy Loss in the Upstream Region of the Beamline Flat Method ---|
+TH1D *hMCELossUpstreamFlat = new TH1D("hMCELossUpstreamFlat", "Energy Loss Prior to Entering the TPC (Flat 66.6 MeV)", 1100, -100, 1000);
+
+//--- Final Kinetic Energy in the TPC Using Map ---|
+TH1D *hERemainMCFlat = new TH1D("hERemainMCFlat", "Remaining Energy from MC Using Flat 66.6 MeV", 1000, -75, 75);
+
+
+
+
+//--- "Matched Track" dE/dX ---|
+TH1D *hRecoMCdEdX = new TH1D("hRecoMCdEdX", "Matched Track dE/dX", 200, 0, 50);
+
+//--- "Matched Track" Residual Range ---|
+TH1D *hRecoMCResidualRange = new TH1D("hRecoMCResidualRange", "Matched Track Residual Range", 400, -100, 100);
+
+//--- "Matched Track" Track Pitch ---|
+TH1D *hRecoMCTrkPitch = new TH1D("hRecoMCTrkPitch", "Matched Track Pitch", 1000, 0, 5);
+
+//--- "Matched Track" dE/dX vs RR ---|
+TH2D *hRecoMCdEdXvsRR = new TH2D("hRecoMCdEdXvsRR", "dE/dX vs Residual Range", 200, 0, 100, 200, 0, 50);
+
+//--- Energy Loss in the TPC (Reco) ---|
+TH1D *hMCELossRecoInTPC = new TH1D("hMCELossRecoInTPC", "Reconstructed Energy Loss Inside the TPC", 1100, -100, 1000);
+
+//--- TPC Track Phi at the Upstream Point ---|
+TH1D *hRecoMCTPCPhi = new TH1D("hRecoMCTPCPhi", "TPC Track #phi", 360, 0, 360);
+//--- TPC Track Theta at the Upstream Point ---|
+TH1D *hRecoMCTPCTheta = new TH1D("hRecoMCTPCTheta", "TPC Track #theta", 180, 0, 90);
+
+//--- Reconstructed Particle Start X Position Inside TPC ---|
+TH1D *hRecoMCTPCStartX = new TH1D("hRecoMCTPCStartX", "Reconstructed X_{0} Inside TPC", 200, -50, 50);
+//--- Reconstructed Particle Start Y Position Inside TPC ---|
+TH1D *hRecoMCTPCStartY = new TH1D("hRecoMCTPCStartY", "Reconstructed Y_{0} Inside TPC", 200, -50, 50);
+//--- Reconstructed Particle Start Z Position Inside TPC ---|
+TH1D *hRecoMCTPCStartZ = new TH1D("hRecoMCTPCStartZ", "Reconstructed Z_{0} Inside TPC", 600, -120, 180);
+
+//--- Final Kinetic Energy in the TPC Using TPC Reco Only ---|
+TH1D *hERemainTPCRecoOnly = new TH1D("hERemainTPCRecoOnly", "Remaining Energy Using TPC Reco Energy", 1000, -75, 75);
+
+//--- Energy Loss in the Upstream Region of the Beamline Using TPC Theta and Phi ---|
+TH1D *hMCELossUpstreamTPCRecoMap = new TH1D("hMCELossUpstreamTPCRecoMap", "Energy Loss Prior to Entering the TPC (Using Reco TPC #theta and #phi)", 1100, -100, 1000);
+
+//--- Delta Energy Loss in TPC Between True and dE/dX ---|
+TH1D *hDeltaEnergyLossInTPCTruevsReco = new TH1D("hDeltaEnergyLossInTPCTruevsReco", "#Delta Energy Loss in the TPC (True - Reco)", 1000, -75, 75);
 
 //=================================================================================|
 //=================================================================================|
@@ -544,5 +596,30 @@ for (Long64_t jentry=0; jentry<nentries; jentry++)
    //#####################################################################|
 
 //===========================|
+
+
+
+
+
+//--- Creating a File to Store the Histograms ---|
+TFile myfile("./DDProtonMC_EnergyCalibrationHistograms.root", "CREATE");
+
+
+//-------------------------------|
+//--- Dividing the Histograms ---|
+//-------------------------------|
+
+
+
+//-------------------------------|
+
+
+//=========================================|
+//=== Writing the Histograms to My File ===|
+//=========================================|
+
+
+
+//=========================================|
 
 }
