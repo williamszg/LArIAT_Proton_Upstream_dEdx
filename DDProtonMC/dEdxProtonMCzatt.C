@@ -7,7 +7,9 @@
 #include <TVector3.h>
 
 //=================================================================================|
+//===============                                                   ===============|
 //===                         Histograms Defined Here                           ===|
+//===============                                                   ===============|
 //=================================================================================|
 
 //--- Primary Particle Start X Position ---|
@@ -17,6 +19,9 @@ TH1D *hMCPrimaryStartY = new TH1D("hMCPrimaryStartY", "Primary Particle Y_{0}", 
 //--- Primary Particle Start Z Position ---|
 TH1D *hMCPrimaryStartZ = new TH1D("hMCPrimaryStartZ", "Primary Particle Z_{0}", 600, -120, 180);
 
+
+
+
 //--- Primary Particle End X Position ---|
 TH1D *hMCPrimaryEndX = new TH1D("hMCPrimaryEndX", "Primary Particle X_{f}", 120, -10, 50);
 //--- Primary Particle End Y Position ---|
@@ -24,10 +29,16 @@ TH1D *hMCPrimaryEndY = new TH1D("hMCPrimaryEndY", "Primary Particle Y_{f}", 40, 
 //--- Primary Particle End Z Position ---|
 TH1D *hMCPrimaryEndZ = new TH1D("hMCPrimaryEndZ", "Primary Particle Z_{f}", 200, -10, 90);
 
+
+
+
 //--- Primary Particle End X vs Z Positions ---|
 TH2D *hMCPrimaryEndXvsZ = new TH2D("hMCPrimaryEndXvsZ", "X_{f} vs Z_{f}", 200, -10, 90, 120, -10, 50);
 //--- Primary Particle End Y vs Z Positions ---|
 TH2D *hMCPrimaryEndYvsZ = new TH2D("hMCPrimaryEndYvsZ", "Y_{f} vs Z_{f}", 200, -10, 90, 40, -20, 20);
+
+
+
 
 //--- Primary Particle Start X Position Inside TPC ---|
 TH1D *hMCPrimaryTPCStartX = new TH1D("hMCPrimaryTPCStartX", "Primary Particle X_{0} Inside TPC", 200, -50, 50);
@@ -36,12 +47,18 @@ TH1D *hMCPrimaryTPCStartY = new TH1D("hMCPrimaryTPCStartY", "Primary Particle Y_
 //--- Primary Particle Start Z Position Inside TPC ---|
 TH1D *hMCPrimaryTPCStartZ = new TH1D("hMCPrimaryTPCStartZ", "Primary Particle Z_{0} Inside TPC", 600, -120, 180);
 
+
+
+
 //--- Primary Particle Initial Px ---|
 TH1D *hMCPrimaryPxUnWeighted = new TH1D("hMCPrimaryPxUnWeighted", "Primary Particle P_{x_0}", 300, -150, 150);
 //--- Primary Particle Initial Py ---|
 TH1D *hMCPrimaryPyUnWeighted = new TH1D("hMCPrimaryPyUnWeighted", "Primary Particle P_{y_0}", 300, -150, 150);
 //--- Primary Particle Initial Pz ---|
 TH1D *hMCPrimaryPzUnWeighted = new TH1D("hMCPrimaryPzUnWeighted", "Primary Particle P_{z_0}", 250, 0, 2500);
+
+
+
 
 //--- Initial Kinetic Energy ---|
 TH1D *hMCTrueInitialKE = new TH1D("hMCTrueInitialKE", "Initial Kinetic Energy (MC Truth)", 1100, -100, 1000);
@@ -82,6 +99,108 @@ TH2D *hPhivsThetaELossDivide = new TH2D("hPhivsThetaELossDivide", "#phi vs #thet
 //--- Energy Loss Upstream vs Particle Pz ---|
 TH2D *hMCPrimaryPzvsELossUpstream = new TH2D("hMCPrimaryPzvsELossUpstream", "Energy Loss Upstream vs Primary Particle P_{z}", 250, 0, 2500, 1100, -100, 1000);
 
+
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|
+//+++ Not Weird Energy Loss Peak Two Dimensional Histograms +++|
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|
+
+//--- Not Weird Energy Loss Peak X vs Z ---|
+TH2D *hMCPrimaryXvsZNotWeirdPeak = new TH2D("hMCPrimaryXvsZNotWeirdPeak", "X vs Z", 200, -100, 10, 120, -10, 50);
+//--- Not Weird Energy Loss Peak Y vs Z ---|
+TH2D *hMCPrimaryYvsZNotWeirdPeak = new TH2D("hMCPrimaryYvsZNotWeirdPeak", "Y vs Z", 200, -100, 10, 40, -20, 20);
+
+//--- Not Weird Energy Loss Peak X vs Z Flux ---|
+TH2D *hMCPrimaryXvsZNotWeirdPeakFlux = new TH2D("hMCPrimaryXvsZNotWeirdPeakFlux", "X vs Z", 200, -100, 10, 120, -10, 50);
+//--- Not Weird Energy Loss Peak Y vs Z Flux ---|
+TH2D *hMCPrimaryYvsZNotWeirdPeakFlux = new TH2D("hMCPrimaryYvsZNotWeirdPeakFlux", "Y vs Z", 200, -100, 10, 40, -20, 20);
+
+//--- Not Weird Energy Loss Peak X vs Z Divide ---|
+TH2D *hMCPrimaryXvsZNotWeirdPeakDivide = new TH2D("hMCPrimaryXvsZNotWeirdPeakDivide", "X vs Z", 200, -100, 10, 120, -10, 50);
+//--- Not Weird Energy Loss Peak Y vs Z Divide ---|
+TH2D *hMCPrimaryYvsZNotWeirdPeakDivide = new TH2D("hMCPrimaryYvsZNotWeirdPeakDivide", "Y vs Z", 200, -100, 10, 40, -20, 20);
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|
+
+
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++|
+//+++ Weird Energy Loss Peak Two Dimensional Histograms +++|
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++|
+
+//--- Weird Energy Loss Peak X vs Z ---|
+TH2D *hMCPrimaryXvsZWeirdPeak = new TH2D("hMCPrimaryXvsZWeirdPeak", "X vs Z", 200, -100, 10, 120, -10, 50);
+//--- Weird Energy Loss Peak Y vs Z ---|
+TH2D *hMCPrimaryYvsZWeirdPeak = new TH2D("hMCPrimaryYvsZWeirdPeak", "Y vs Z", 200, -100, 10, 40, -20, 20);
+
+//--- Weird Energy Loss Peak X vs Z Flux ---|
+TH2D *hMCPrimaryXvsZWeirdPeakFlux = new TH2D("hMCPrimaryXvsZWeirdPeakFlux", "X vs Z", 200, -100, 10, 120, -10, 50);
+//--- Weird Energy Loss Peak Y vs Z Flux ---|
+TH2D *hMCPrimaryYvsZWeirdPeakFlux = new TH2D("hMCPrimaryYvsZWeirdPeakFlux", "Y vs Z", 200, -100, 10, 40, -20, 20);
+
+//--- Weird Energy Loss Peak X vs Z Divide ---|
+TH2D *hMCPrimaryXvsZWeirdPeakDivide = new TH2D("hMCPrimaryXvsZWeirdPeakDivide", "X vs Z", 200, -100, 10, 120, -10, 50);
+//--- Weird Energy Loss Peak Y vs Z Divide ---|
+TH2D *hMCPrimaryYvsZWeirdPeakDivide = new TH2D("hMCPrimaryYvsZWeirdPeakDivide", "Y vs Z", 200, -100, 10, 40, -20, 20);
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++|
+
+
+
+
+//------------------------------------------------------------------|
+//--- Phi vs Theta Loss for Different Cuts (Top, Middle, Bottom) ---|
+//------------------------------------------------------------------|
+
+//++++++++++++++++++++++++++++++++++++++++++++++|
+//+++ Phi vs Theta Loss for -15cm < Y < -5cm +++|
+//++++++++++++++++++++++++++++++++++++++++++++++|
+
+//--- Phi vs Theta Energy Loss Bottom ---|
+TH2D *hPhivsThetaELossBottom = new TH2D("hPhivsThetaELossBottom", "#phi vs #theta Energy Loss Bottom", 72, 0, 360, 8, -10, 30);
+//--- Phi vs Theta Energy Loss Flux Bottom ---|
+TH2D *hPhivsThetaELossFluxBottom = new TH2D("hPhivsThetaELossFluxBottom", "#phi vs #theta Energy Loss Flux Bottom", 72, 0, 360, 8, -10, 30);
+//--- Phi vs Theta Energy Loss Divide Bottom ---|
+TH2D *hPhivsThetaELossDivideBottom = new TH2D("hPhivsThetaELossDivideBottom", "#phi vs #theta Energy Loss Divide Bottom", 72, 0, 360, 8, -10, 30);
+
+//++++++++++++++++++++++++++++++++++++++++++++++|
+
+//++++++++++++++++++++++++++++++++++++++++++++++|
+//+++  Phi vs Theta Loss for -5cm < Y < 5cm  +++|
+//++++++++++++++++++++++++++++++++++++++++++++++|
+
+//--- Phi vs Theta Energy Loss Middle ---|
+TH2D *hPhivsThetaELossMid = new TH2D("hPhivsThetaELossMid", "#phi vs #theta Energy Loss Middle", 72, 0, 360, 8, -10, 30);
+//--- Phi vs Theta Energy Loss Flux Middle ---|
+TH2D *hPhivsThetaELossFluxMid = new TH2D("hPhivsThetaELossFluxMid", "#phi vs #theta Energy Loss Flux Middle", 72, 0, 360, 8, -10, 30);
+//--- Phi vs Theta Energy Loss Divide Middle ---|
+TH2D *hPhivsThetaELossDivideMid = new TH2D("hPhivsThetaELossDivideMid", "#phi vs #theta Energy Loss Divide Middle", 72, 0, 360, 8, -10, 30);
+
+//++++++++++++++++++++++++++++++++++++++++++++++|
+
+//++++++++++++++++++++++++++++++++++++++++++++++|
+//+++  Phi vs Theta Loss for 5cm < Y < 15cm  +++|
+//++++++++++++++++++++++++++++++++++++++++++++++|
+
+//--- Phi vs Theta Energy Loss Top ---|
+TH2D *hPhivsThetaELossTop = new TH2D("hPhivsThetaELossTop", "#phi vs #theta Energy Loss Top", 72, 0, 360, 8, -10, 30);
+//--- Phi vs Theta Energy Loss Flux Top ---|
+TH2D *hPhivsThetaELossFluxTop = new TH2D("hPhivsThetaELossFluxTop", "#phi vs #theta Energy Loss Flux Top", 72, 0, 360, 8, -10, 30);
+//--- Phi vs Theta Energy Loss Divide Top ---|
+TH2D *hPhivsThetaELossDivideTop = new TH2D("hPhivsThetaELossDivideTop", "#phi vs #theta Energy Loss Divide Top", 72, 0, 360, 8, -10, 30);
+
+//++++++++++++++++++++++++++++++++++++++++++++++|
+
+//------------------------------------------------------------------|
+
+
+
+
+
+
+//=================================================================================|
 //=================================================================================|
 
 
@@ -354,6 +473,7 @@ for (Long64_t jentry=0; jentry<nentries; jentry++)
       hELossXvsYFlux->Fill(FirstPoint_X, FirstPoint_Y);
 
       hMCPrimaryPzvsELossUpstream->Fill(momentumScale, EnergyLossOutsideTPC);
+
 
 
       
