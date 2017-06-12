@@ -341,29 +341,88 @@ for (Long64_t jentry=0; jentry<nentries; jentry++)
 
       //##################################################|
 
-   //--- Filling Initial TPC Information ---|
-   hMCPrimaryTPCStartX->Fill(FirstPoint_X);
-   hMCPrimaryTPCStartY->Fill(FirstPoint_Y);
-   hMCPrimaryTPCStartZ->Fill(FirstPoint_Z);
+      //--- Filling Initial TPC Information ---|
+      hMCPrimaryTPCStartX->Fill(FirstPoint_X);
+      hMCPrimaryTPCStartY->Fill(FirstPoint_Y);
+      hMCPrimaryTPCStartZ->Fill(FirstPoint_Z);
 
-   //--- Filling Histograms for Energy Loss ---|
-   hMCTrueELossUpstream->Fill(EnergyLossOutsideTPC);
-   hMCTrueELossInTPC->Fill(EnergyLossInsideTPC);
+      //--- Filling Histograms for Energy Loss ---|
+      hMCTrueELossUpstream->Fill(EnergyLossOutsideTPC);
+      hMCTrueELossInTPC->Fill(EnergyLossInsideTPC);
    
-   hELossXvsY->Fill(FirstPoint_X, FirstPoint_Y, EnergyLossOutsideTPC);
-   hELossXvsYFlux->Fill(FirstPoint_X, FirstPoint_Y);
+      hELossXvsY->Fill(FirstPoint_X, FirstPoint_Y, EnergyLossOutsideTPC);
+      hELossXvsYFlux->Fill(FirstPoint_X, FirstPoint_Y);
 
-   hMCPrimaryPzvsELossUpstream->Fill(momentumScale, EnergyLossOutsideTPC);
+      hMCPrimaryPzvsELossUpstream->Fill(momentumScale, EnergyLossOutsideTPC);
+
+
       
    //**********************************|
+
+      }
    
    //#####################################################################|   
    //#####################################################################|
 
-//===========================|
+
+
+
+   //#####################################################################|
+   //#####################################################################|
+   //#########                                                   #########|
+   //###                 Reconstructed Information                     ###|
+   //#########                                                   #########|
+   //#####################################################################|
+   //#####################################################################|
+
+   bool ReconstructedEvent = true;
+
+   float MCRecodEdx[1000] = {0.};
+   int nMCRecoSpts = 0;
+
+   double MCRecoSptsX[1000];
+   double MCRecoSptsY[1000];
+   double MCRecoSptsZ[1000];
+
+   double MCRecoResRange[1000] = {0.};
+   double MCRecoPitch[1000] = {0.};
+
+   double primary_track_length = 0;
+
+   //******************************************|
+   //*** Loop Over All Reconstructed Tracks ***|
+   //******************************************|
+
+   for (int nTPCtrk = 0; nTPCtrk < ntracks_reco; nTPCtrk++)
+      {
+
+      //---------------------------------------------------------------|
+      //--- Looping Over the Calorimetry Spacepoints for this Track ---|
+      //---------------------------------------------------------------|
+
+      primary_track_length = trklength[nTPCtrk];
+      for (int nspts = 0; nspts < ntrkhits[nTPCtrk]; nspts++)
+	 {
+         MCRecodEdX[nMCRecoSpts] = trkdedx[nTPCtrk][1][nspts];
+	 //&&& Fix for Negative dEdX &&&
+	 if (MCRecodEdX[nMCRecoSpts] < 0 && nspts < ntrkhits[nTPCtrk] && nspts > 0)
+            {
+	    MCRecodEdX[nMCRecoSpts] = ( (trkdedx[nTPCtrk][1][nspts - 1] + trkdedx[nTPCtrk][1][nspts + 1]) / 2);
+	    }
+         //&&& If it Didn't Fix it, Skip it &&&
+	 if (MCRecodEdX[nMCRecoSpts] < 0) {continue;}
+
+         }
+
+      //---------------------------------------------------------------|
 
       }
 
-   }
+   //******************************************|
+
+   //#####################################################################|   
+   //#####################################################################|
+
+//===========================|
 
 }
