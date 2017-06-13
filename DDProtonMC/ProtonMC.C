@@ -213,6 +213,9 @@ TH1D *hMCELossUpstreamTPCRecoMap = new TH1D("hMCELossUpstreamTPCRecoMap", "Energ
 /////////////////////////////////// Delta Energy Loss in TPC between True and dE/dX method /////////////////////////
 TH1D *hDeltaEnergyLossInTPCTruevsReco = new TH1D("hDeltaEnergyLossInTPCTruevsReco", "#Delta Energy Loss in the TPC (True - Reco)", 1000, -75, 75);
 
+/////////////////////////////////// Delta Energy Loss in TPC between True and Reco Map Method /////////////////////////
+TH1D *hDeltaEnergyLossUpstreamTPCTruevsReco = new TH1D("hDeltaEnergyLossUpstreamTPCTruevsReco", "#Delta Energy Loss Upstream of the TPC (True - Reco)", 1000, -75, 75);
+
 
 TH2D *hDeltaEInTPCvsTrkLength = new TH2D("hDeltaEInTPCvsTrkLength", "TrkLength vs Delta E", 1000, 0, 110, 1000, -75, 75);
 TH2D *hDeltaEInTPCvsKEinit = new TH2D("hDeltaEInTPCvsKEinit", "Initial KE vs Delta E", 80, 0, 800, 1000, -75, 75);
@@ -316,6 +319,8 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
    float InitialKineticEnergy = 0;
    
    float EnergyLossFromMap = 0;
+
+   float ELossMapTrue = 0;
    
    // #######################################
    // ### Loop over all the G4  particles ###
@@ -765,6 +770,9 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
       // === Filling Histograms ===
       hERemainMCTrue->Fill(ERemainingMCTrue);
       hMCELossUpstreamLookUp->Fill(EnergyLossFromMap);
+
+      ELossMapTrue = EnergyLossFromMap;
+      
       hERemainMCMap->Fill(ERemainingMCMap);
       
       hMCELossUpstreamFlat->Fill(66.6);
@@ -1070,7 +1078,10 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
    hMCELossRecoInTPC->Fill(RecoEnergyLossInsideTPC);
    
    float DeltaEnergyLossInTPC = EnergyLossInsideTPC - RecoEnergyLossInsideTPC;
-   
+
+   float DeltaELossUpstreamTruevsReco = ELossMapTrue - EnergyLossFromMap;
+   hDeltaEnergyLossUpstreamTPCTruevsReco->Fill(DeltaELossUpstreamTruevsReco);
+
    hDeltaEnergyLossInTPCTruevsReco->Fill(DeltaEnergyLossInTPC);
 
    hDeltaEInTPCvsTrkLength->Fill(primary_track_length,DeltaEnergyLossInTPC);
