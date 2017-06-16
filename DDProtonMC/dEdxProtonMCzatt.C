@@ -363,6 +363,7 @@ for (Long64_t jentry=0; jentry<nentries; jentry++)
    float EnergyRemainingRecoTPCOnly = 9999;
    float InitialKineticEnergy = 0;
    float EnergyLossFromMap = 0;
+   float ELossMapTrue = 0;
 
    //---------------------------------|
    
