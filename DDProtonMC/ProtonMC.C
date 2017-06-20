@@ -1078,9 +1078,11 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
    hMCELossRecoInTPC->Fill(RecoEnergyLossInsideTPC);
    
    float DeltaEnergyLossInTPC = EnergyLossInsideTPC - RecoEnergyLossInsideTPC;
+   float DeltaELossUpstreamTruevsReco = -999.;
 
-   float DeltaELossUpstreamTruevsReco = ELossMapTrue - EnergyLossFromMap;
-   hDeltaEnergyLossUpstreamTPCTruevsReco->Fill(DeltaELossUpstreamTruevsReco);
+   DeltaELossUpstreamTruevsReco = ELossMapTrue - EnergyLossFromMap;
+
+   if (DeltaELossUpstreamTruevsReco != -999) {hDeltaEnergyLossUpstreamTPCTruevsReco->Fill(DeltaELossUpstreamTruevsReco);}
 
    hDeltaEnergyLossInTPCTruevsReco->Fill(DeltaEnergyLossInTPC);
 
