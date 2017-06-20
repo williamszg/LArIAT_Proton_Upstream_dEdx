@@ -1213,6 +1213,8 @@ hDeltaEnergyLossTruevsMap->Write();
 
 hDeltaEnergyLossInTPCTruevsReco->Write();
 
+hDeltaEnergyLossUpstreamTPCTruevsReco->Write();
+
 hMCPrimaryXvsZWeirdPeak1->Write();
 hMCPrimaryYvsZWeirdPeak1->Write();
 hMCPrimaryXvsZWeirdPeak1Flux->Write();
